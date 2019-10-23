@@ -67,7 +67,7 @@ Using: 139,142,96,33,242,90,108,25,219,16,68,130,181,214,92,10,251,194,73,20,76,
 EncodedData: i45gIfJabBnbEESCtdZcCvvCSRRM2Qe+c/BD20fYjwJhOA9yjJoBcF4rQGR3VHQBj4ys3cejA+oMWWwAAF3Zz6i6VK4/254qzEbIin+Lc7PTG/OGG31LmJOQgXGmbzE1e0ooY2UQ/q/3zSEZQw0FOektZr1aXNwIs2GfOoATSx8gBTrjB2BU77vy6/YhH6On8V0Qrf4Bjdeg1oI8nzVLtxh0eID0caqq0eYpz3SxJUT8XZA2+wJB6JiAqYn5ISEg3MkTWtMTfyBNI0/Ty6sykfsm6O7C9xC38Ye2PkSYmCiuYAGPpqURGAY0BLFvOpM78+PJbvilWHBrqi4QGzf1aacR4/iqju4wGI7GeUTIiyMFP6xLayCrulOYlnfxmHUEK4IscX3la4TTsJurLsUouuyGpOtOS9T6/5beLYBDhy9yz4jQgrpDmonafbdMuDLK6YX+7ylwiZCWczXXgrxa7PbVMPHaVPogjyQ/ywImGz1/pI/0USHXWrztnRHTo7xeOgZIOLFUgBCoKsBzNETCrAav/qMyxY9ToPB6nmRg7sld/GXnLRFQjiOQGuiQhNTCPgOUOtsarg/y7kz+leHH0Pe2Z96GR1KZGSip5ik37szaC5ob8jN11Qji2LJso/ECnFQVWuKsOxycxCdJj0cvwsQF3OUvN8gChSadq5XOTjc=
 ```
 
-This `EncodedData` response can now be used as the `DigitalSignature` header value for thay payload, with a corresponding Bearer Token value.
+This `EncodedData` response can now be used as the `DigitalSignature` header value for that payload, with a corresponding Bearer Token value.
 
 ## Reference Example
 
