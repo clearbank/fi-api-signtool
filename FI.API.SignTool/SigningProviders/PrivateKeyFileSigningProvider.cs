@@ -14,7 +14,7 @@ namespace FI.API.SignTool.SigningProviders
         {
             FileName = fileName;
 
-            _privateKey = CertificateHelper.ImportPrivateKey(File.ReadAllText(FileName));
+            _privateKey = CryptographyHelper.ImportPrivateKey(File.ReadAllText(FileName));
         }
 
         public byte[] SignHash(byte[] bytes)

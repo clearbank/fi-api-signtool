@@ -55,7 +55,6 @@ namespace FI.API.SignTool
 
                 return 2;
             }
-#if !NETCOREAPP
             finally
             {
                 if (System.Diagnostics.Debugger.IsAttached)
@@ -68,7 +67,6 @@ namespace FI.API.SignTool
                     Console.Out.WriteLine();
                 }
             }
-#endif
         }
 
         private static int RunHash(IHashArguments arguments, RunResult runResult)
