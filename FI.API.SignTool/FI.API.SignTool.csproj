@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>netcoreapp2.1;netcoreapp2.2</TargetFrameworks>
+    <Company>ClearBank</Company>
+    <Authors>ClearBank</Authors>
+    <Description>This tool is designed to replicate the steps that an FI.API client needs to take to sign a payload when making a POST request to the FI.API.</Description>
+    <Copyright>Copyright (c) 2019 ClearBank</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="FI.API.SignTool.args.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.5.0" />
+    <PackageReference Include="Microsoft.Azure.KeyVault" Version="3.0.3" />
+    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.1.0" />
+    <PackageReference Include="Portable.BouncyCastle" Version="1.8.5" />
+  </ItemGroup>
+
+</Project>
