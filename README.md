@@ -13,7 +13,7 @@ It provides diagnostic output at each stage so users can verify against their ow
 
 ## Availability
 
-Packaged as C# source code this is targeted at .NET Core, but is compatible with any OS capable of running .NET Core (e.g. Windows, MacOS, Linux). Specifically, you will need .NET Core v2.2 installed.
+Packaged as C# source code this is targeted at .NET Core, but is compatible with any OS capable of running .NET Core (e.g. Windows, MacOS, Linux). Specifically, you will need .NET Core v2.1 installed.
 
 Contact ClearBank support if you need a pre-built executable for your OS.
 
