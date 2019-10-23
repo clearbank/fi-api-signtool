@@ -9,7 +9,7 @@ using Org.BouncyCastle.Security;
 
 namespace FI.API.SignTool.Helpers
 {
-    public class CertificateHelper
+    public class CryptographyHelper
     {
         public static byte[] GenerateDigitalSignature(string body, string privateKeyText)
         {
