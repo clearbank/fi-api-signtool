@@ -2,6 +2,9 @@
 
 .NET Core tool to help with signing payloads correctly
 
+This sample ClearBank® code is intended to provide Financial Institutions examples to help integrate with ClearBank®’s live API.
+All information provided by ClearBank® is provided "as is" and without any implied warranty, representation, condition or otherwise, regarding its accuracy or completeness.
+
 ## Description
 
 This tool is designed to replicate the steps that an FI.API client needs to take to sign a payload when making a POST request to the FI.API.
