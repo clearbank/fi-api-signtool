@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".docs", ".docs", "{B09592EC
 		readme.md = readme.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FI.API.SignTool.Tests", "tests\FI.API.SignTool.Tests\FI.API.SignTool.Tests.csproj", "{692E98C1-282F-4107-91E2-B1C5DF5998CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{3585E94C-13AD-4398-99E7-39D370F73369}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3585E94C-13AD-4398-99E7-39D370F73369}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3585E94C-13AD-4398-99E7-39D370F73369}.Release|Any CPU.Build.0 = Release|Any CPU
+		{692E98C1-282F-4107-91E2-B1C5DF5998CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{692E98C1-282F-4107-91E2-B1C5DF5998CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{692E98C1-282F-4107-91E2-B1C5DF5998CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{692E98C1-282F-4107-91E2-B1C5DF5998CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
