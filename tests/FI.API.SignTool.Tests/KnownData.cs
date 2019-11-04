@@ -7,7 +7,7 @@ namespace FI.API.SignTool.Tests
     public class KnownData
     {
         // NOTE: These files are the same as the ones provided with this repo in the `Data` folder
-        //       Copied into this repo to ensure they are always available to the test runner
+        //       Copied into this project to ensure they are always available to the test runner
         public const string KnownPublicKeyFileName = @"Data\FI.SignTool.Testing.pem";
         public const string KnownPrivateKeyFileName = @"Data\FI.SignTool.Testing.key";
         public static string KnownPublicKey => File.ReadAllText(KnownPublicKeyFileName);
