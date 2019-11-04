@@ -8,8 +8,8 @@ namespace FI.API.SignTool.Helpers
     {
         public static byte[] TranslateByteArray(string text)
         {
-            var values = text.Split(",".ToCharArray())
-                .Select(Byte.Parse)
+            var values = (text ?? string.Empty).Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
+                .Select(byte.Parse)
                 .ToArray();
 
             return values;
@@ -17,7 +17,7 @@ namespace FI.API.SignTool.Helpers
 
         public static string DescribeByteArray(IEnumerable<byte> bytes)
         {
-            var text = String.Join(",", bytes.Select(b => b.ToString()));
+            var text = string.Join(",", bytes?.Select(b => b.ToString()) ?? Enumerable.Empty<string>());
 
             return text;
         }

@@ -18,7 +18,7 @@ namespace FI.API.SignTool.SigningProviders
                     return new AzureKeyVaultSigningProvider(arguments.AzureKeyVaultConnectionString);
 
                 default:
-                    throw new ArgumentOutOfRangeException($"Unable to locate {nameof(ISigningProvider)} for {arguments.SigningProvider}");
+                    throw new ArgumentOutOfRangeException(nameof(arguments), $"Unable to locate {nameof(ISigningProvider)} for {arguments.SigningProvider}");
             }
         }
     }

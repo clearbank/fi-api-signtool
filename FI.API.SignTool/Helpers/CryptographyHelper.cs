@@ -2,7 +2,6 @@
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Security;
@@ -44,7 +43,7 @@ namespace FI.API.SignTool.Helpers
             return verified;
         }
 
-        private static byte[] HashBody(string content)
+        internal static byte[] HashBody(string content)
         {
             var contentBytes = Encoding.UTF8.GetBytes(content);
 
@@ -56,20 +55,25 @@ namespace FI.API.SignTool.Helpers
             }
         }
 
-        public static RSACryptoServiceProvider ImportPrivateKey(string pem)
+        public static RSACryptoServiceProvider ImportPrivateKey(string privateKeyPEM)
         {
-            var pr = new PemReader(new StringReader(pem));
-            var rsaParameters = DotNetUtilities.ToRSAParameters((RsaPrivateCrtKeyParameters)pr.ReadObject());
+            var pr = new PemReader(new StringReader(privateKeyPEM));
+            var privateKey = (RsaPrivateCrtKeyParameters) pr.ReadObject();
+            if (privateKey == null)
+                throw new ArgumentException("Invalid Private Key", nameof(privateKeyPEM));
+            var rsaParameters = DotNetUtilities.ToRSAParameters(privateKey);
             var csp = new RSACryptoServiceProvider();
             csp.ImportParameters(rsaParameters);
             return csp;
         }
 
-        public static RSACryptoServiceProvider ImportPublicKey(string pem)
+        public static RSACryptoServiceProvider ImportPublicKey(string publicKeyPEM)
         {
-            var pr = new PemReader(new StringReader(pem));
-            var publicKey = (AsymmetricKeyParameter)pr.ReadObject();
-            var rsaParameters = DotNetUtilities.ToRSAParameters((RsaKeyParameters)publicKey);
+            var pr = new PemReader(new StringReader(publicKeyPEM));
+            var publicKey = (RsaKeyParameters)pr.ReadObject();
+            if (publicKey == null)
+                throw new ArgumentException("Invalid Public Key", nameof(publicKeyPEM));
+            var rsaParameters = DotNetUtilities.ToRSAParameters(publicKey);
             var csp = new RSACryptoServiceProvider();
             csp.ImportParameters(rsaParameters);
             return csp;

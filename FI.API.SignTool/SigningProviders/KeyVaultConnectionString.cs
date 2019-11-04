@@ -7,6 +7,9 @@ namespace FI.API.SignTool.SigningProviders
 {
     public class KeyVaultConnectionString : IValidatable
     {
+        public const string DefaultAlgorithm = "RS256";
+        public const string DefaultKeyVersion = "";
+
         public string Url { get; set; }
         public string KeyName { get; set; }
         public string KeyVersion { get; set; }
@@ -23,15 +26,15 @@ namespace FI.API.SignTool.SigningProviders
                 .Select(x => x.Split("=".ToCharArray()))
                 .ToDictionary(x => x.First().ToLower(), x => string.Join("=", x.Skip(1)));
 
-            Url           = GetValue(dict, nameof(Url).ToLower());
-            KeyName       = GetValue(dict, nameof(KeyName).ToLower());
-            KeyVersion    = GetValue(dict, nameof(KeyVersion).ToLower()) ?? string.Empty;
-            Algorithm     = GetValue(dict, nameof(Algorithm).ToLower()) ?? "RS256";
-            ClientId      = GetValue(dict, nameof(ClientId).ToLower());
-            ClientSecret  = GetValue(dict, nameof(ClientSecret).ToLower());
+            Url          = GetValue(dict, nameof(Url).ToLower());
+            KeyName      = GetValue(dict, nameof(KeyName).ToLower());
+            KeyVersion   = GetValue(dict, nameof(KeyVersion).ToLower()) ?? DefaultKeyVersion;
+            Algorithm    = GetValue(dict, nameof(Algorithm).ToLower()) ?? DefaultAlgorithm;
+            ClientId     = GetValue(dict, nameof(ClientId).ToLower());
+            ClientSecret = GetValue(dict, nameof(ClientSecret).ToLower());
         }
 
-        private string GetValue(IDictionary<string, string> dict, string key)
+        private static string GetValue(IDictionary<string, string> dict, string key)
         {
             return dict.ContainsKey(key)
                 ? dict[key]

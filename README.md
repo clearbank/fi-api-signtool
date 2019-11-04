@@ -43,9 +43,9 @@ REM Hash Sign and Encode data from a filename using a local Private Key
 dotnet run -- HashSignEncode -f [filename] -p FileName -k "C:\MyPrivateKey.pem"
 ```
 
--d / -f are interchangeable - input data can come from command line or a file
--p [provider] - specified the Signing provider (`FileName` / `AzureKeyVault`)
--v [connectionstring] - specifies the connection details to Azure KeyVault (`Url=;KeyName=;ClientId=;ClientSecret=;`)
+- -d / -f are interchangeable - input data can come from command line or a file
+- -p [provider] - specifies the Signing provider (`FileName` / `AzureKeyVault`)
+- -v [connectionstring] - specifies the connection details to Azure KeyVault (`Url=;KeyName=;ClientId=;ClientSecret=;`)
 
 Should produce output similar to:
 
