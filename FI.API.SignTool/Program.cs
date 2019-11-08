@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using CommandLine;
+using CommandLine.Text;
 using FI.API.SignTool.Extensions;
 using FI.API.SignTool.Helpers;
 using FI.API.SignTool.Parameters;
@@ -13,11 +17,6 @@ namespace FI.API.SignTool
 {
     internal class Program
     {
-        internal class CBResponse
-        {
-            public int Nonce;
-        }
-
         private static int Main(string[] args)
         {
             try
