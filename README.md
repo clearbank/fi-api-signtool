@@ -23,6 +23,11 @@ From the project directory, it can be called using:
 dotnet run -- [command] [arguments]
 ```
 
+By default this project targets .NET Core 2.1 (`netcoreapp2.1`). If you with to run with a different target framework specify it via:
+```cmd
+dotnet run --framework netcoreapp2.0 -- [command] [arguments]
+```
+
 ## Operation
 
 There are 3 steps to getting a Digital Signature header from a payload:

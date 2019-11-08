@@ -14,6 +14,7 @@ namespace FI.API.SignTool.Parameters
         public string DataFileName { get; set; }
 
         public string InputData => ArgumentsHelper.GetDataOrFileContent(Data, DataFileName);
+
         public void Validate()
         {
         }
