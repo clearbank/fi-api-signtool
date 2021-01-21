@@ -22,7 +22,7 @@ From the project directory, it can be called using:
 ``` cmd
 dotnet run -- [command] [arguments]
 ```
-
+ 
 ## Operation
 
 There are 3 steps to getting a Digital Signature header from a payload:
@@ -68,6 +68,14 @@ EncodedData: i45gIfJabBnbEESCtdZcCvvCSRRM2Qe+c/BD20fYjwJhOA9yjJoBcF4rQGR3VHQBj4y
 ```
 
 This `EncodedData` response can now be used as the `DigitalSignature` header value for that payload, with a corresponding Bearer Token value.
+
+### Framework selection
+
+With the latest version you may need to add the --framework parameter:
+
+``` cmd
+dotnet run --framework netcoreapp2.1 -- HashSignEncode -f [filename] -p FileName -k "C:\MyPrivateKey.pem"
+```
 
 ## Reference Example
 
