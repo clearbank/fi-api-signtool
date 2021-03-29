@@ -13,7 +13,7 @@ It provides diagnostic output at each stage so users can verify against their ow
 
 ## Availability
 
-Packaged as C# source code this is targeted at .NET Core, but is compatible with any OS capable of running .NET Core (e.g. Windows, MacOS, Linux). Specifically, you will need .NET Core v2.1 installed.
+Packaged as C# source code this is targeted at .NET 5. It is compatible with any OS capable of running .NET 5 (e.g. Windows, MacOS, Linux).
 
 Contact ClearBank support if you need a pre-built executable for your OS.
 
@@ -109,7 +109,7 @@ E.g. -d 123,117,56,27
 ```text
 > dotnet run -- hash --help
 FI.API.SignTool 1.0.0
-(c) 2019 ClearBank
+(c) 2021 ClearBank
 
   -d, --data            The data to be processed
 
@@ -142,7 +142,7 @@ HashedData (SHA256): 148,189,234,202,214,13,8,58,105,172,74,24,83,242,253,161,22
 ```cmd
 > dotnet run -- sign --help
 FI.API.SignTool 1.0.0
-(c) 2019 ClearBank
+(c) 2021 ClearBank
 
   -d, --data            The data to be processed
 
@@ -179,7 +179,7 @@ SignedData: 139,142,96,33,242,90,108,25,219,16,68,130,181,214,92,10,251,194,73,2
 ```cmd
 > dotnet run -- encode --help
 FI.API.SignTool 1.0.0
-(c) 2019 ClearBank
+(c) 2021 ClearBank
 
   -d, --data            The data to be processed
 
