@@ -20,7 +20,7 @@ Contact ClearBank support if you need a pre-built executable for your OS.
 From the project directory, it can be called using:
 
 ``` cmd
-dotnet run --framework net5.0 -- [command] [arguments]
+dotnet run -- [command] [arguments]
 ```
 
 ## Operation
