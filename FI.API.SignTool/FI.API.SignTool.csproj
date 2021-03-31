@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net5.0</TargetFrameworks>
+    <TargetFramework>net5.0</TargetFramework>
     <Company>ClearBank</Company>
     <Authors>ClearBank</Authors>
     <Description>This tool is designed to replicate the steps that an FI.API client needs to take to sign a payload when making a POST request to the FI.API.</Description>
