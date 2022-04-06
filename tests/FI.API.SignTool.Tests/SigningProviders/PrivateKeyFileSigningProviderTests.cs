@@ -32,7 +32,7 @@ namespace FI.API.SignTool.Tests.SigningProviders
 
             // Assert
             ex.ShouldNotBeNull();
-            ex.ParamName.ShouldBe("privateKeyPEM");
+            ex.ParamName.ShouldBe("pem");
 
             File.Delete(tempFileName);
         }

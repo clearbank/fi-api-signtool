@@ -1,6 +1,6 @@
 ﻿# FI.API Sign Tool
 
-.NET 5 tool to help with signing payloads correctly
+.NET 6 tool to help with signing payloads correctly
 
 This sample ClearBank® code is intended to provide Financial Institutions examples to help integrate with ClearBank®’s live API.
 All information provided by ClearBank® is provided "as is" and without any implied warranty, representation, condition or otherwise, regarding its accuracy or completeness.
@@ -13,7 +13,7 @@ It provides diagnostic output at each stage so users can verify against their ow
 
 ## Availability
 
-Packaged as C# source code that targets .NET 5. It is compatible with any OS capable of running .NET 5 (e.g. Windows, MacOS, Linux).
+Packaged as C# source code that targets .NET 6. It is compatible with any OS capable of running .NET 6 (e.g. Windows, MacOS, Linux).
 
 Contact ClearBank support if you need a pre-built executable for your OS.
 

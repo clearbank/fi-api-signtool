@@ -2,9 +2,6 @@
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-using Org.BouncyCastle.Crypto.Parameters;
-using Org.BouncyCastle.OpenSsl;
-using Org.BouncyCastle.Security;
 
 namespace FI.API.SignTool.Helpers
 {
@@ -14,11 +11,8 @@ namespace FI.API.SignTool.Helpers
         {
             var hash = HashBody(body);
 
-            byte[] signedHash;
-            using (var privateKey = ImportPrivateKey(privateKeyText))
-            {
-                signedHash = privateKey.SignHash(hash, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
-            }
+            using var rsa = ImportPem(privateKeyText);
+            var signedHash = rsa.SignHash(hash, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
 
             return signedHash;
         }
@@ -30,10 +24,8 @@ namespace FI.API.SignTool.Helpers
             bool verified;
             try
             {
-                using (var publicKey = ImportPublicKey(publicKeyText))
-                {
-                    verified = publicKey.VerifyHash(hash, Convert.FromBase64String(digitalSignature), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
-                }
+                using var rsa = ImportPem(publicKeyText);
+                verified = rsa.VerifyHash(hash, Convert.FromBase64String(digitalSignature), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
             }
             catch
             {
@@ -47,36 +39,25 @@ namespace FI.API.SignTool.Helpers
         {
             var contentBytes = Encoding.UTF8.GetBytes(content);
 
-            using (var provider = new SHA256Managed())
+            using var provider = SHA256.Create();
+            var hash = provider.ComputeHash(contentBytes);
+
+            return hash;
+        }
+
+        public static RSA ImportPem(string pem)
+        {
+            var rsa = RSA.Create();
+            try
             {
-                var hash = provider.ComputeHash(contentBytes);
-
-                return hash;
+                rsa.ImportFromPem(pem);
             }
-        }
+            catch (ArgumentException ex)
+            {
+                throw new ArgumentException("Invalid PEM", nameof(pem), ex);
+            }
 
-        public static RSACryptoServiceProvider ImportPrivateKey(string privateKeyPEM)
-        {
-            var pr = new PemReader(new StringReader(privateKeyPEM));
-            var privateKey = (RsaPrivateCrtKeyParameters) pr.ReadObject();
-            if (privateKey == null)
-                throw new ArgumentException("Invalid Private Key", nameof(privateKeyPEM));
-            var rsaParameters = DotNetUtilities.ToRSAParameters(privateKey);
-            var csp = new RSACryptoServiceProvider();
-            csp.ImportParameters(rsaParameters);
-            return csp;
-        }
-
-        public static RSACryptoServiceProvider ImportPublicKey(string publicKeyPEM)
-        {
-            var pr = new PemReader(new StringReader(publicKeyPEM));
-            var publicKey = (RsaKeyParameters)pr.ReadObject();
-            if (publicKey == null)
-                throw new ArgumentException("Invalid Public Key", nameof(publicKeyPEM));
-            var rsaParameters = DotNetUtilities.ToRSAParameters(publicKey);
-            var csp = new RSACryptoServiceProvider();
-            csp.ImportParameters(rsaParameters);
-            return csp;
+            return rsa;
         }
     }
 }
