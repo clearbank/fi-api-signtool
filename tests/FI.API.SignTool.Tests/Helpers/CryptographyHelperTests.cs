@@ -51,53 +51,39 @@ namespace FI.API.SignTool.Tests.Helpers
         }
 
         [Fact]
-        public void ImportPrivateKey_can_load_known_private_key()
+        public void ImportPem_can_load_known_private_key()
         {
             // Act
-            var result = CryptographyHelper.ImportPrivateKey(KnownData.KnownPrivateKey);
+            var result = CryptographyHelper.ImportPem(KnownData.KnownPrivateKey);
 
             // Assert
             result.ShouldNotBeNull();
-            result.PublicOnly.ShouldBeFalse();
+            result.ExportRSAPrivateKey().ShouldNotBeNull();
         }
 
         [Fact]
-        public void ImportPrivateKey_fails_to_load_invalid_private_key()
+        public void ImportPem_can_load_known_public_key()
         {
             // Act
-            var privateKey = Guid.NewGuid().ToString();
+            var result = CryptographyHelper.ImportPem(KnownData.KnownPublicKey);
+
+            // Assert
+            result.ShouldNotBeNull();
+            result.ExportRSAPublicKey().ShouldNotBeNull();
+        }
+
+        [Fact]
+        public void ImportPem_fails_to_load_invalid_key()
+        {
+            // Act
+            var pem = Guid.NewGuid().ToString();
             var result = Assert.Throws<ArgumentException>(
-                () => CryptographyHelper.ImportPrivateKey(privateKey)
+                () => CryptographyHelper.ImportPem(pem)
             );
 
             // Assert
             result.ShouldNotBeNull();
-            result.ParamName.ShouldBe("privateKeyPEM");
-        }
-
-        [Fact]
-        public void ImportPublicKey_can_load_known_public_key()
-        {
-            // Act
-            var result = CryptographyHelper.ImportPublicKey(KnownData.KnownPublicKey);
-
-            // Assert
-            result.ShouldNotBeNull();
-            result.PublicOnly.ShouldBeTrue();
-        }
-
-        [Fact]
-        public void ImportPublicKey_fails_to_load_invalid_public_key()
-        {
-            // Act
-            var privateKey = Guid.NewGuid().ToString();
-            var result = Assert.Throws<ArgumentException>(
-                () => CryptographyHelper.ImportPublicKey(privateKey)
-            );
-
-            // Assert
-            result.ShouldNotBeNull();
-            result.ParamName.ShouldBe("publicKeyPEM");
+            result.ParamName.ShouldBe("pem");
         }
     }
 }

@@ -7,19 +7,19 @@ namespace FI.API.SignTool.SigningProviders
 {
     public class PrivateKeyFileSigningProvider : ISigningProvider
     {
-        private readonly RSACryptoServiceProvider _privateKey;
+        private readonly RSA _rsa;
         public string FileName { get; set; }
 
         public PrivateKeyFileSigningProvider(string fileName)
         {
             FileName = fileName;
 
-            _privateKey = CryptographyHelper.ImportPrivateKey(File.ReadAllText(FileName));
+            _rsa = CryptographyHelper.ImportPem(File.ReadAllText(FileName));
         }
 
         public byte[] SignHash(byte[] bytes)
         {
-            var signedBytes = _privateKey.SignHash(bytes, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+            var signedBytes = _rsa.SignHash(bytes, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
 
             return signedBytes;
         }
