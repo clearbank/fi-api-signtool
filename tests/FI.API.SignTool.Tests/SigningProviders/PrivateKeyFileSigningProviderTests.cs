@@ -4,50 +4,52 @@ using FI.API.SignTool.SigningProviders;
 using Shouldly;
 using Xunit;
 
-namespace FI.API.SignTool.Tests.SigningProviders
+namespace FI.API.SignTool.Tests.SigningProviders;
+
+public class PrivateKeyFileSigningProviderTests
 {
-    public class PrivateKeyFileSigningProviderTests
+    [Fact]
+    public void PrivateKeyFileSigningProvider_ValidPrivateKeyFile_ConstructsProviderSuccessfully()
     {
-        [Fact]
-        public void PrivateKeyFileSigningProvider_can_construct_with_valid_private_key_file()
-        {
-            // Act
-            var result = new PrivateKeyFileSigningProvider(KnownData.KnownPrivateKeyFileName);
+        var result = new PrivateKeyFileSigningProvider(KnownData.KnownPrivateKeyFileName);
 
-            // Assert
-            result.ShouldNotBeNull();
-        }
+        result.ShouldNotBeNull();
+    }
 
-        [Fact]
-        public void PrivateKeyFileSigningProvider_fails_to_construct_with_invvalid_private_key_file()
-        {
-            // Arrange
-            var tempFileName = Path.GetTempFileName();
-            File.WriteAllText(tempFileName, Guid.NewGuid().ToString());
+    [Fact]
+    public void PrivateKeyFileSigningProvider_InvalidPrivateKeyFile_ThrowsArgumentException()
+    {
+        var tempFileName = Path.GetTempFileName();
+        File.WriteAllText(tempFileName, Guid.NewGuid().ToString());
 
-            // Act
-            var ex = Assert.Throws<ArgumentException>(
-                () => new PrivateKeyFileSigningProvider(tempFileName)
+        Should.Throw<ArgumentException>(() => new PrivateKeyFileSigningProvider(tempFileName))
+            .ShouldSatisfyAllConditions(
+                ex => ex.Message.ShouldStartWith("Invalid PEM"),
+                ex => ex.ParamName.ShouldBe("pem")
             );
 
-            // Assert
-            ex.ShouldNotBeNull();
-            ex.ParamName.ShouldBe("pem");
+        File.Delete(tempFileName);
+    }
 
-            File.Delete(tempFileName);
-        }
+    [Fact]
+    public void PrivateKeyFileSigningProvider_UnknownPrivateKeyFile_ThrowsFileNotFoundException()
+    {
+        var unknownFileName = Guid.NewGuid().ToString();
 
-        [Fact]
-        public void SignHash_can_generate_the_correct_hash()
-        {
-            // Arrange
-            var signingProvider = new PrivateKeyFileSigningProvider(KnownData.KnownPrivateKeyFileName);
+        Should.Throw<FileNotFoundException>(() => new PrivateKeyFileSigningProvider(unknownFileName))
+            .ShouldSatisfyAllConditions(
+                ex => ex.Message.ShouldStartWith("Could not find file"),
+                ex => ex.Message.ShouldContain(unknownFileName)
+            );
+    }
 
-            // Act
-            var result = signingProvider.SignHash(KnownData.KnownBodyHash);
+    [Fact]
+    public void SignHash_ValidPrivateKeyFile_GeneratesHashSuccessfully()
+    {
+        var signingProvider = new PrivateKeyFileSigningProvider(KnownData.KnownPrivateKeyFileName);
 
-            // Assert
-            result.ShouldBe(KnownData.KnownBodySignature);
-        }
+        var result = signingProvider.SignHash(KnownData.KnownBodyHash);
+
+        result.ShouldBe(KnownData.KnownBodySignature);
     }
 }

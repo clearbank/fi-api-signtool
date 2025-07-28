@@ -1,6 +1,5 @@
-﻿namespace FI.API.SignTool.Parameters.Interfaces
+﻿namespace FI.API.SignTool.Parameters.Interfaces;
+
+public interface IHashSignEncodeArguments : IHashArguments, ISignArguments, IEncodeArguments
 {
-    public interface IHashSignEncodeArguments : IHashArguments, ISignArguments, IEncodeArguments
-    {
-    }
 }

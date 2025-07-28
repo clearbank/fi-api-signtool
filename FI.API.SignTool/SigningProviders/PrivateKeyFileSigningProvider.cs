@@ -1,27 +1,39 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Security.Cryptography;
-using FI.API.SignTool.Helpers;
 using FI.API.SignTool.SigningProviders.Interfaces;
 
-namespace FI.API.SignTool.SigningProviders
+namespace FI.API.SignTool.SigningProviders;
+
+public class PrivateKeyFileSigningProvider : ISigningProvider
 {
-    public class PrivateKeyFileSigningProvider : ISigningProvider
+    private readonly RSA _rsa;
+
+    public PrivateKeyFileSigningProvider(string? fileName)
     {
-        private readonly RSA _rsa;
-        public string FileName { get; set; }
+        ArgumentNullException.ThrowIfNull(fileName, nameof(fileName));
+        
+        _rsa = ImportPem(File.ReadAllText(fileName));
+    }
 
-        public PrivateKeyFileSigningProvider(string fileName)
+    public byte[] SignHash(byte[] bytes)
+    {
+        return _rsa.SignHash(bytes, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+    }
+
+    private static RSA ImportPem(string pem)
+    {
+        var rsa = RSA.Create();
+
+        try
         {
-            FileName = fileName;
-
-            _rsa = CryptographyHelper.ImportPem(File.ReadAllText(FileName));
+            rsa.ImportFromPem(pem);
+        }
+        catch (ArgumentException ex)
+        {
+            throw new ArgumentException("Invalid PEM", nameof(pem), ex);
         }
 
-        public byte[] SignHash(byte[] bytes)
-        {
-            var signedBytes = _rsa.SignHash(bytes, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
-
-            return signedBytes;
-        }
+        return rsa;
     }
 }

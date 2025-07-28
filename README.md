@@ -1,6 +1,6 @@
 ﻿# FI.API Sign Tool
 
-.NET 6 tool to help with signing payloads correctly
+.NET 8 tool to help with signing payloads correctly.
 
 This sample ClearBank® code is intended to provide Financial Institutions examples to help integrate with ClearBank®’s live API.
 All information provided by ClearBank® is provided "as is" and without any implied warranty, representation, condition or otherwise, regarding its accuracy or completeness.
@@ -13,7 +13,7 @@ It provides diagnostic output at each stage so users can verify against their ow
 
 ## Availability
 
-Packaged as C# source code that targets .NET 6. It is compatible with any OS capable of running .NET 6 (e.g. Windows, MacOS, Linux).
+Packaged as C# source code that targets .NET 8. It is compatible with any OS capable of running .NET 8 (e.g. Windows, MacOS, Linux).
 
 Contact ClearBank support if you need a pre-built executable for your OS.
 
@@ -37,7 +37,7 @@ This tool can invoke any step individually or all 3 in a chain.
 
 ```cmd
 REM Hash Sign and Encode data from the command line using KeyVault
-dotnet run -- HashSignEncode -d "{ payload data }" -p AzureKeyVault -v "Url=https://my.vault.azure.net;KeyName=MyKeyName;ClientId=xxxxx;ClientSecret=yyyyy"
+dotnet run -- HashSignEncode -d "{ payload data }" -p AzureKeyVault -v "Url=https://my.vault.azure.net;KeyName=MyKeyName;TenantId=xxxxx;ClientId=yyyyy;ClientSecret=zzzzz"
 
 REM Hash Sign and Encode data from a filename using a local Private Key
 dotnet run -- HashSignEncode -f [filename] -p FileName -k "C:\MyPrivateKey.pem"
@@ -45,12 +45,12 @@ dotnet run -- HashSignEncode -f [filename] -p FileName -k "C:\MyPrivateKey.pem"
 
 - -d / -f are interchangeable - input data can come from command line or a file
 - -p [provider] - specifies the Signing provider (`FileName` / `AzureKeyVault`)
-- -v [connectionstring] - specifies the connection details to Azure KeyVault (`Url=;KeyName=;ClientId=;ClientSecret=;`)
+- -v [connectionstring] - specifies the connection details to Azure KeyVault (`Url=;KeyName=;TenantId=;ClientId=;ClientSecret=;`)
 
 Should produce output similar to:
 
 ```text
-> dotnet run -- hashsignencode -d "{ \"Message\": \"Hello World\" }" -p AzureKeyvault -v "Url=https://some.vault.azure.net/;Keyname=MyKey;ClientId=MyClientId;ClientSecret=MyClientSecret
+> dotnet run -- hashsignencode -d "{ \"Message\": \"Hello World\" }" -p AzureKeyvault -v "Url=https://some.vault.azure.net/;Keyname=MyKey;TenantId=MyTenantId;ClientId=MyClientId;ClientSecret=MyClientSecret"
 
 RunHash
 Using: { "Message": "Hello World" }
@@ -109,7 +109,7 @@ E.g. -d 123,117,56,27
 ```text
 > dotnet run -- hash --help
 FI.API.SignTool 1.0.0
-(c) 2019 ClearBank
+(c) 2025 ClearBank
 
   -d, --data            The data to be processed
 
@@ -142,7 +142,7 @@ HashedData (SHA256): 148,189,234,202,214,13,8,58,105,172,74,24,83,242,253,161,22
 ```cmd
 > dotnet run -- sign --help
 FI.API.SignTool 1.0.0
-(c) 2019 ClearBank
+(c) 2025 ClearBank
 
   -d, --data            The data to be processed
 
@@ -152,8 +152,7 @@ FI.API.SignTool 1.0.0
 
   -k, --keyfilename     FileName for Private Key
 
-  -v, --keyvault        Azure KeyVault connection string (Url=[KeyVaultUrl];KeyName=;KeyVersion=;ClientId=;ClientSecret=;)
-                                                      OR (Url=[keyIdentifier];ClientId=;ClientSecret=;)
+  -v, --keyvault        Azure KeyVault connection string (Url=;KeyName=;[KeyVersion=;TenantId=;ClientId=;ClientSecret=;])
 
   --help                Display this help screen.
 
@@ -163,7 +162,7 @@ FI.API.SignTool 1.0.0
 Example:
 
 ```cmd
-dotnet run -- sign -d "148,189,234,202,214,13,8,58,105,172,74,24,83,242,253,161,227,250,250,248,102,40,47,23,103,197,125,115,243,112,62,107" -p AzureKeyvault -v "Url=https://my.vault.azure.net/;Keyname=MyKey;ClientId=aaa;ClientSecret=bbb"
+dotnet run -- sign -d "148,189,234,202,214,13,8,58,105,172,74,24,83,242,253,161,227,250,250,248,102,40,47,23,103,197,125,115,243,112,62,107" -p AzureKeyvault -v "Url=https://my.vault.azure.net/;Keyname=MyKey;TenantId=aaa;ClientId=bbb;ClientSecret=ccc"
 ```
 
 might produce:
@@ -179,7 +178,7 @@ SignedData: 139,142,96,33,242,90,108,25,219,16,68,130,181,214,92,10,251,194,73,2
 ```cmd
 > dotnet run -- encode --help
 FI.API.SignTool 1.0.0
-(c) 2019 ClearBank
+(c) 2025 ClearBank
 
   -d, --data            The data to be processed
 

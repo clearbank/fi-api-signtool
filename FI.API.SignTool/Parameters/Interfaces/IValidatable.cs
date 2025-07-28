@@ -1,7 +1,6 @@
-﻿namespace FI.API.SignTool.Parameters.Interfaces
+﻿namespace FI.API.SignTool.Parameters.Interfaces;
+
+public interface IValidatable
 {
-    public interface IValidatable
-    {
-        void Validate();
-    }
+    void Validate();
 }

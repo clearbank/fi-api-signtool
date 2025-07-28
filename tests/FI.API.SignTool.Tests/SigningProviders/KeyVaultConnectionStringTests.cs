@@ -3,64 +3,68 @@ using FI.API.SignTool.SigningProviders;
 using Shouldly;
 using Xunit;
 
-namespace FI.API.SignTool.Tests.SigningProviders
+namespace FI.API.SignTool.Tests.SigningProviders;
+
+public class KeyVaultConnectionStringTests
 {
-    public class KeyVaultConnectionStringTests
+    [Fact]
+    public void KeyVaultConnectionString_AlgorithmNotProvided_UsesDefaultAlgorithm()
     {
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData("some random text")]
-        public void KeyVaultConnectionString_can_construct_with_any_string_but_fails_validation(string connectionString)
-        {
-            // Act
-            var result = new KeyVaultConnectionString(connectionString);
-            var ex = Assert.Throws<ArgumentException>(
-                () => result.Validate()
+        var connectionString = "Url=myUrl;KeyName=myKey;KeyVersion=abc;";
+
+        var keyVaultConnectionString = new KeyVaultConnectionString(connectionString);
+
+        keyVaultConnectionString.Url.ShouldBe("myUrl");
+        keyVaultConnectionString.KeyName.ShouldBe("myKey");
+        keyVaultConnectionString.KeyVersion.ShouldBe("abc");
+        keyVaultConnectionString.Algorithm.ShouldBe(KeyVaultConnectionString.DefaultAlgorithm);
+    }
+
+
+    [Fact]
+    public void HasClientCredentials_ClientCredentialsProvided_ReturnsTrue()
+    {
+        var connectionString = "Url=myUrl;KeyName=myKey;TenantId=123;ClientId=456;ClientSecret=789";
+
+        var keyVaultConnectionString = new KeyVaultConnectionString(connectionString);
+
+        keyVaultConnectionString.HasClientCredentials.ShouldBeTrue();
+        keyVaultConnectionString.TenantId.ShouldBe("123");
+        keyVaultConnectionString.ClientId.ShouldBe("456");
+        keyVaultConnectionString.ClientSecret.ShouldBe("789");
+    }
+
+    [Theory]
+    [InlineData("Url=myUrl;KeyName=myKey;KeyVersion=abc")]
+    [InlineData("Url=myUrl;KeyName=myKey;KeyVersion=abc;ClientId=456")]
+    [InlineData("Url=myUrl;KeyName=myKey;KeyVesrion=abc;TenantId=123;ClientId=456")]
+    [InlineData("Url=myUrl;KeyName=myKey;KeyVesrion=abc;ClientId=456;ClientSecret=789")]
+    public void HasClientCredentials_ClientCredentialsNotProvided_ReturnsFalse(string connectionString)
+    {
+        var keyVaultConnectionString = new KeyVaultConnectionString(connectionString);
+
+        keyVaultConnectionString.HasClientCredentials.ShouldBeFalse();
+    }
+
+    [Theory]
+    [InlineData(null, nameof(KeyVaultConnectionString.Url))]
+    [InlineData("", nameof(KeyVaultConnectionString.Url))]
+    [InlineData("some random text", nameof(KeyVaultConnectionString.Url))]
+    [InlineData("KeyName=myKey", nameof(KeyVaultConnectionString.Url))]
+    [InlineData("Url=myurl", nameof(KeyVaultConnectionString.KeyName))]
+    [InlineData("Url=myurl;KeyName=myKey;TenantId=123", nameof(KeyVaultConnectionString.ClientId))]
+    [InlineData("Url=myurl;KeyName=myKey;TenantId=123;ClientId=456", nameof(KeyVaultConnectionString.ClientSecret))]
+    [InlineData("Url=myurl;KeyName=myKey;ClientId=456;ClientSecret=789", nameof(KeyVaultConnectionString.TenantId))]
+    [InlineData("Url=myurl;KeyName=myKey;ClientId=456;", nameof(KeyVaultConnectionString.TenantId))]
+    [InlineData("Url=myurl;KeyName=myKey;ClientSecret=789", nameof(KeyVaultConnectionString.TenantId))]
+    public void Validate_ConnectionStringIsInvalid_ThrowsArgumentException(string? connectionString, string missingArgument)
+    {
+        var keyVaultConnectionString = new KeyVaultConnectionString(connectionString);
+
+        Should.Throw<ArgumentException>(keyVaultConnectionString.Validate)
+            .ShouldSatisfyAllConditions(
+                ex => ex.Message.ShouldStartWith($"{nameof(KeyVaultConnectionString)}: Invalid or missing {missingArgument}"),
+                ex => ex.ParamName.ShouldBe(missingArgument)
             );
-
-            // Assert
-            result.ShouldNotBeNull();
-            ex.ShouldNotBeNull();
-        }
-
-        [Theory]
-        [InlineData("URL=myurl;cliENTid=12345;clientSECRET=67890;keyname=myKey;KEYVERsion=1;AlGoRiThM=RS512", true, "myurl", "12345", "67890", "myKey", "1", "RS512")]
-        [InlineData("UrL=myurl;", false, "myurl", null, null, null, KeyVaultConnectionString.DefaultKeyVersion, KeyVaultConnectionString.DefaultAlgorithm)]
-        [InlineData("clientid=12345;URL=myurl", false, "myurl", "12345", null, null, KeyVaultConnectionString.DefaultKeyVersion, KeyVaultConnectionString.DefaultAlgorithm)]
-        [InlineData("clientid=12345;URL=myurl;clientsecret=ABCDE", false, "myurl", "12345", "ABCDE", null, KeyVaultConnectionString.DefaultKeyVersion, KeyVaultConnectionString.DefaultAlgorithm)]
-        [InlineData("clientid=12345;keyname=qqq;URL=myurl;clientsecret=ABCDE", true, "myurl", "12345", "ABCDE", "qqq", KeyVaultConnectionString.DefaultKeyVersion, KeyVaultConnectionString.DefaultAlgorithm)]
-        [InlineData("keyversion=57;clientid=12345;keyname=qqq;URL=myurl;clientsecret=ABCDE", true, "myurl", "12345", "ABCDE", "qqq", "57", KeyVaultConnectionString.DefaultAlgorithm)]
-        [InlineData("keyversion=57;clientid=12345;algorithm=EC256;keyname=qqq;URL=myurl;clientsecret=ABCDE", true, "myurl", "12345", "ABCDE", "qqq", "57", "EC256")]
-        [InlineData("keyversion=57;algorithm=EC256;keyname=qqq;URL=myurl;clientsecret=ABCDE", false, "myurl", null, "ABCDE", "qqq", "57", "EC256")]
-        [InlineData("keyversion=57;clientid=12345;algorithm=EC256;keyname=qqq;URL=myurl", false, "myurl", "12345", null, "qqq", "57", "EC256")]
-        public void KeyVaultConnectionString_can_construct_with_any_string_successfully(string connectionString, bool validates, string url, string clientId, string clientSecret, string keyName, string keyVersion, string algorithm)
-        {
-            // Act
-            var result = new KeyVaultConnectionString(connectionString);
-
-            var success = true;
-            try
-            {
-                result.Validate();
-            }
-            catch (Exception e)
-            {
-                success = false;
-            }
-
-            // Assert
-            result.ShouldNotBeNull();
-            success.ShouldBe(validates);
-            result.Url.ShouldBe(url);
-            result.ClientId.ShouldBe(clientId);
-            result.ClientSecret.ShouldBe(clientSecret);
-            result.KeyName.ShouldBe(keyName);
-            result.KeyVersion.ShouldBe(keyVersion);
-            result.Algorithm.ShouldBe(algorithm);
-
-            result.HasKeyName.ShouldBe(!string.IsNullOrWhiteSpace(keyName));
-            result.HasKeyVersion.ShouldBe(!string.IsNullOrWhiteSpace(keyVersion));
-        }
     }
 }
